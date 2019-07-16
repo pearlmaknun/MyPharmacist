@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">My Pharmacist</string>
+    <string name="selamat_datang">Selamat Datang.</string>
+    <string name="silahkan_login_terlebih_dahulu">Silahkan login terlebih dahulu.</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="masuk">Masuk</string>
+    <string name="daftar_akun_baru">Daftar Akun Baru</string>
+    <string name="nomor_telefon">Nomor Telefon</string>
+    <string name="domisili">Domisili</string>
+    <string name="nama_lengkap">Nama Lengkap</string>
+    <string name="daftar">Daftar</string>
+    <string name="belum_punya_akun">Belum punya akun?</string>
+    <string name="sudah_punya_akun">Sudah punya akun?</string>
+    <string name="konfirmasi_password">Konfirmasi Password</string>
+    <string name="consulting">Konsultasi</string>
+    <string name="discover">Discover</string>
+    <string name="profile">Profil</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="kosultasi_anda_telah_diterima_apoteker_silahkan_untuk_memulai_sesi_konsultasi_anda_dengan_menekan_tombol_mulai">Kosultasi Anda Telah Diterima Apoteker, Silahkan untuk memulai sesi Konsultasi anda dengan menekan tombol mulai.</string>
+    <string name="pengajuan_konsultasi_telah_di_sampaikan_kepada_apoteker_terkait_harap_untuk_menunggu_konfirmasi_dari_apoteker">Pengajuan Konsultasi telah di sampaikan kepada Apoteker terkait. Harap untuk menunggu konfirmasi dari apoteker.</string>
+</resources>
