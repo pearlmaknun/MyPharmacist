@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 
 import io.pearlmaknun.mypharmacist.MainActivity;
 import io.pearlmaknun.mypharmacist.model.Profile;
-import io.pearlmaknun.mypharmacist.model.User;
 
 public class Session {
     SharedPreferences pref;

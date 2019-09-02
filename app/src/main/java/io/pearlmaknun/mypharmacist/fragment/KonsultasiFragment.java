@@ -1,5 +1,6 @@
 package io.pearlmaknun.mypharmacist.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,21 +25,21 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.pearlmaknun.mypharmacist.ConsultationActivity;
 import io.pearlmaknun.mypharmacist.R;
 import io.pearlmaknun.mypharmacist.adapter.NearestApotekerAdapter;
 import io.pearlmaknun.mypharmacist.data.Session;
 import io.pearlmaknun.mypharmacist.helper.GpsTrackers;
 import io.pearlmaknun.mypharmacist.model.CheckActivityResponse;
+import io.pearlmaknun.mypharmacist.model.Konsultasi;
 import io.pearlmaknun.mypharmacist.model.NearestApoteker;
 import io.pearlmaknun.mypharmacist.model.NearestApotekerResponse;
 import io.pearlmaknun.mypharmacist.model.RequestConsultation;
 import io.pearlmaknun.mypharmacist.util.DialogUtils;
 
-import static io.pearlmaknun.mypharmacist.data.Constan.BERAKHIR;
 import static io.pearlmaknun.mypharmacist.data.Constan.BERLANGSUNG;
 import static io.pearlmaknun.mypharmacist.data.Constan.CHECK_HAS_CONSULTATION;
 import static io.pearlmaknun.mypharmacist.data.Constan.DIPROSES;
-import static io.pearlmaknun.mypharmacist.data.Constan.DITERIMA;
 import static io.pearlmaknun.mypharmacist.data.Constan.NEAREST_APOTEKER;
 import static io.pearlmaknun.mypharmacist.data.Constan.REQUEST_CONSULTATION;
 
@@ -63,6 +64,7 @@ public class KonsultasiFragment extends Fragment {
     private GpsTrackers gps;
 
     NearestApotekerAdapter adapter;
+    Konsultasi konsultasi;
 
     public KonsultasiFragment() {
         // Required empty public constructor
@@ -201,13 +203,10 @@ public class KonsultasiFragment extends Fragment {
                             Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
                             DialogUtils.closeDialog();
                             if (response1.getStatus()) {
+                                konsultasi = response1.getData();
                                 layout(response1.getData().getStatusChat());
                             } else {
-                                layoutAktif.setVisibility(View.GONE);
-                                layoutList.setVisibility(View.GONE);
-                                layoutCari.setVisibility(View.VISIBLE);
-                                layoutDiterima.setVisibility(View.GONE);
-                                layoutWaiting.setVisibility(View.GONE);
+                                layout("-1");
                                 Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
                             }
                         }
@@ -231,17 +230,17 @@ public class KonsultasiFragment extends Fragment {
                 layoutDiterima.setVisibility(View.GONE);
                 layoutWaiting.setVisibility(View.VISIBLE);
                 break;
-            case DITERIMA:
-                layoutAktif.setVisibility(View.GONE);
-                layoutList.setVisibility(View.GONE);
-                layoutCari.setVisibility(View.GONE);
-                layoutDiterima.setVisibility(View.VISIBLE);
-                layoutWaiting.setVisibility(View.GONE);
-                break;
             case BERLANGSUNG:
                 layoutAktif.setVisibility(View.VISIBLE);
                 layoutList.setVisibility(View.GONE);
                 layoutCari.setVisibility(View.GONE);
+                layoutDiterima.setVisibility(View.GONE);
+                layoutWaiting.setVisibility(View.GONE);
+                break;
+            default:
+                layoutAktif.setVisibility(View.GONE);
+                layoutList.setVisibility(View.GONE);
+                layoutCari.setVisibility(View.VISIBLE);
                 layoutDiterima.setVisibility(View.GONE);
                 layoutWaiting.setVisibility(View.GONE);
                 break;
@@ -255,6 +254,9 @@ public class KonsultasiFragment extends Fragment {
                 discover();
                 break;
             case R.id.lanjutkan:
+                Intent intent = new Intent(getContext(), ConsultationActivity.class);
+                intent.putExtra("konsultasi", konsultasi);
+                startActivity(intent);
                 break;
             case R.id.mulai:
                 break;

@@ -13,7 +13,7 @@ public class CheckActivityResponse {
     private String message;
     @SerializedName("data")
     @Expose
-    private Check data;
+    private Konsultasi data;
 
     public Boolean getStatus() {
         return status;
@@ -31,11 +31,11 @@ public class CheckActivityResponse {
         this.message = message;
     }
 
-    public Check getData() {
+    public Konsultasi getData() {
         return data;
     }
 
-    public void setData(Check data) {
+    public void setData(Konsultasi data) {
         this.data = data;
     }
 }

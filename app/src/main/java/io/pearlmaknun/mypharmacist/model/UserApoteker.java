@@ -1,24 +1,25 @@
 package io.pearlmaknun.mypharmacist.model;
 
-public class User {
+public class UserApoteker {
+
     String id;
     String username;
-    String main_id;
+    String apoteker_id;
 
-    public User(String id, String username) {
+    public UserApoteker(String id, String username) {
         this.id = id;
         this.username = username;
     }
 
-    public String getMain_id() {
-        return main_id;
+    public String getApoteker_id() {
+        return apoteker_id;
     }
 
-    public void setMain_id(String main_id) {
-        this.main_id = main_id;
+    public void setApoteker_id(String apoteker_id) {
+        this.apoteker_id = apoteker_id;
     }
 
-    public User() {
+    public UserApoteker() {
     }
 
     public String getId() {

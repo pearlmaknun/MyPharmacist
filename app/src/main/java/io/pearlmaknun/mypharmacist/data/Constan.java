@@ -26,8 +26,9 @@ public class Constan {
 
     //status chat
     public static final String DIPROSES = "0";
-    public static final String DITERIMA = "1";
-    public static final String BERLANGSUNG = "2";
-    public static final String BERAKHIR = "3";
+    public static final String BERLANGSUNG = "1";
+    public static final String DITOLAK = "2";
+    public static final String EXPIRED = "3";
+    public static final String ENDED = "4";
 }
 
