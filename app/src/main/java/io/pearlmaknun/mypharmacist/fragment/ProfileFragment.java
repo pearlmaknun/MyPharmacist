@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getProfile() {
+        DialogUtils.openDialog(getContext());
         AndroidNetworking.get(PROFIL)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Authorization", "Bearer " + session.getToken())
@@ -75,16 +76,21 @@ public class ProfileFragment extends Fragment {
                     public void onResponse(Object response) {
                         if (response instanceof ProfileResponse) {
                             if (((ProfileResponse) response).getStatus()) {
+                                DialogUtils.closeDialog();
                                 profile = (((ProfileResponse) response).getData());
                                 username.setText(profile.getUserName());
                                 email.setText(profile.getUserEmail());
                                 phone.setText(profile.getUserNumber());
+                            } else {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(getContext(), ((ProfileResponse) response).getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_LONG).show();
                         Log.d("anError", anError.getErrorBody() + " AND " + anError.getErrorDetail());
                     }
                 });
@@ -92,6 +98,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void logout() {
+        DialogUtils.openDialog(getContext());
         AndroidNetworking.get(LOGOUT)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Authorization", "Bearer " + session.getToken())
@@ -106,12 +113,17 @@ public class ProfileFragment extends Fragment {
                                 session.logoutUser();
                                 startActivity(new Intent(getContext(), LoginActivity.class));
                                 Toast.makeText(getContext(), "Logout Berhasil", Toast.LENGTH_SHORT).show();
+                                DialogUtils.closeDialog();
+                            } else {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(getContext(), ((ProfileResponse) response).getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
                         Log.d("anError", anError.getMessage());
                     }
                 });
@@ -120,16 +132,6 @@ public class ProfileFragment extends Fragment {
 
     @OnClick(R.id.logout)
     public void onViewClicked() {
-        DialogUtils.dialogYesNo(getActivity(), "Anda yakin ingin keluar ?", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                logout();
-            }
-        }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        DialogUtils.dialogYesNo(getActivity(), "Anda yakin ingin keluar ?", (dialog, which) -> logout(), (dialog, which) -> dialog.dismiss());
     }
 }

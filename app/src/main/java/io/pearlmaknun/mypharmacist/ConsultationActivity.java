@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,9 +36,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.pearlmaknun.mypharmacist.adapter.ChatAdapter;
+import io.pearlmaknun.mypharmacist.data.Session;
 import io.pearlmaknun.mypharmacist.model.Chat;
 import io.pearlmaknun.mypharmacist.model.Konsultasi;
+import io.pearlmaknun.mypharmacist.model.LoginResponse;
 import io.pearlmaknun.mypharmacist.model.UserApoteker;
+import io.pearlmaknun.mypharmacist.util.DialogUtils;
+
+import static io.pearlmaknun.mypharmacist.data.Constan.END_CHAT;
 
 public class ConsultationActivity extends AppCompatActivity {
 
@@ -50,6 +60,8 @@ public class ConsultationActivity extends AppCompatActivity {
     @BindView(R.id.txt_message)
     EditText txtMessage;
 
+    Session session;
+
     FirebaseUser firebaseUser;
     DatabaseReference reference;
 
@@ -63,6 +75,8 @@ public class ConsultationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consultation);
         ButterKnife.bind(this);
+
+        session = new Session(this);
 
         konsultasi = (Konsultasi) getIntent().getSerializableExtra("konsultasi");
 
@@ -147,8 +161,45 @@ public class ConsultationActivity extends AppCompatActivity {
                 txtMessage.setText("");
                 break;
             case R.id.txt_end:
-
+                endChat();
                 break;
         }
+    }
+
+    private void endChat(){
+        DialogUtils.openDialog(this);
+        AndroidNetworking.post(END_CHAT + konsultasi.getChatId())
+                .addHeaders("Content-Type", "application/json")
+                .addHeaders("Authorization", "Bearer " + session.getToken())
+                .addHeaders("device_id", session.getDeviceId())
+                .build()
+                .getAsObject(LoginResponse.class, new ParsedRequestListener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        if (response instanceof LoginResponse) {
+                            LoginResponse response1 = (LoginResponse) response;
+                            Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
+                            if (response1.getStatus()) {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(ConsultationActivity.this, response1.getMessage(), Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(ConsultationActivity.this, RatingActivity.class);
+                                i.putExtra("chatid", konsultasi.getChatId());
+                                startActivity(i);
+                                finish();
+                            } else {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(ConsultationActivity.this, response1.getMessage(), Toast.LENGTH_LONG).show();
+                                Log.e("RESPONSE SUCCESS", response1.getMessage() + new Gson().toJson(response1));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        DialogUtils.closeDialog();
+                        Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
+                    }
+
+                });
     }
 }

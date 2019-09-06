@@ -107,7 +107,7 @@ public class KonsultasiFragment extends Fragment {
 
     private void discover() {
         Log.e("location: ", "" + lastPosition.latitude + ", " + lastPosition.longitude);
-        DialogUtils.openDialog(getContext());
+        DialogUtils.openDialog(getActivity());
         AndroidNetworking.get(NEAREST_APOTEKER)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("device_id", session.getDeviceId())
@@ -119,11 +119,11 @@ public class KonsultasiFragment extends Fragment {
                 .getAsObject(NearestApotekerResponse.class, new ParsedRequestListener() {
                     @Override
                     public void onResponse(Object response) {
+                        DialogUtils.closeDialog();
                         if (response instanceof NearestApotekerResponse) {
                             NearestApotekerResponse response1 = (NearestApotekerResponse) response;
                             Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
                             if (response1.getStatus()) {
-                                DialogUtils.closeDialog();
                                 layoutAktif.setVisibility(View.GONE);
                                 layoutList.setVisibility(View.VISIBLE);
                                 layoutCari.setVisibility(View.GONE);
@@ -154,7 +154,7 @@ public class KonsultasiFragment extends Fragment {
 
     private void requestKonsul(String apoteker_id) {
         Log.e("location: ", "" + lastPosition.latitude + ", " + lastPosition.longitude);
-        DialogUtils.openDialog(getContext());
+        DialogUtils.openDialog(getActivity());
         AndroidNetworking.post(REQUEST_CONSULTATION)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("device_id", session.getDeviceId())
@@ -189,7 +189,7 @@ public class KonsultasiFragment extends Fragment {
 
     private void check() {
         Log.e("location: ", "" + lastPosition.latitude + ", " + lastPosition.longitude);
-        DialogUtils.openDialog(getContext());
+        //DialogUtils.openDialog(getActivity());
         AndroidNetworking.get(CHECK_HAS_CONSULTATION)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("device_id", session.getDeviceId())
@@ -198,10 +198,10 @@ public class KonsultasiFragment extends Fragment {
                 .getAsObject(CheckActivityResponse.class, new ParsedRequestListener() {
                     @Override
                     public void onResponse(Object response) {
+                        //DialogUtils.closeDialog();
                         if (response instanceof CheckActivityResponse) {
                             CheckActivityResponse response1 = (CheckActivityResponse) response;
                             Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
-                            DialogUtils.closeDialog();
                             if (response1.getStatus()) {
                                 konsultasi = response1.getData();
                                 layout(response1.getData().getStatusChat());
@@ -214,7 +214,7 @@ public class KonsultasiFragment extends Fragment {
 
                     @Override
                     public void onError(ANError anError) {
-                        DialogUtils.closeDialog();
+                        //DialogUtils.closeDialog();
                         Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
                     }
 
@@ -261,5 +261,11 @@ public class KonsultasiFragment extends Fragment {
             case R.id.mulai:
                 break;
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        check();
     }
 }

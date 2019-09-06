@@ -83,8 +83,7 @@ public class Session {
     public Profile getUser() {
         Gson gson = new Gson();
         String json = pref.getString(KEY_USER, "");
-        Profile obj = gson.fromJson(json, Profile.class);
-        return obj;
+        return gson.fromJson(json, Profile.class);
     }
 
     public void checkLogin() {

@@ -88,7 +88,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public int getItemViewType(int position) {
         session = new Session(context);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (chats.get(position).getPengirim().equals(session.getUser().getUserId())){
+        String id = session.getUser().getUserId();
+        Log.e("id chat", id+chats.get(position).getPengirim());
+        //return MSG_TYPE_RIGHT;
+        if (chats.get(position).getPengirim().equals(id)){
             return MSG_TYPE_RIGHT;
         } else {
             return MSG_TYPE_LEFT;

@@ -23,6 +23,8 @@ public class Constan {
     //konsul to apoteker
     public static final String CHECK_HAS_CONSULTATION = BASE_URL_USER + "/statuscon";
     public static final String REQUEST_CONSULTATION = BASE_URL_USER + "/request";
+    public static final String END_CHAT = BASE_URL_USER + "/endchat/";
+    public static final String RATE_CHAT = BASE_URL_USER + "/ratechat/";
 
     //status chat
     public static final String DIPROSES = "0";
