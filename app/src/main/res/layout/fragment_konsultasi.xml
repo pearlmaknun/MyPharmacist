@@ -74,7 +74,8 @@
     <RelativeLayout
         android:id="@+id/layout_aktif"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <androidx.cardview.widget.CardView
             android:layout_margin="@dimen/tepi"
@@ -113,6 +114,7 @@
         android:id="@+id/layout_waiting"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         >
 
         <androidx.cardview.widget.CardView
@@ -143,6 +145,7 @@
     <RelativeLayout
         android:id="@+id/layout_diterima"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView

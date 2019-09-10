@@ -59,6 +59,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         Chat chat = chats.get(position);
         holder.showMessage.setText(chat.getPesan());
 
+        if (position == chats.size()-1){
+            if (chat.getIsseen()){
+                holder.isSeen.setText("Seen");
+            } else {
+                holder.isSeen.setText("Delivered");
+            }
+        } else {
+            holder.isSeen.setVisibility(View.GONE);
+        }
+
         /*if (imgUrl.equals("default")) {
             holder.imgProfile.setImageResource(R.drawable.profile);
         } else {
@@ -77,6 +87,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         CircleImageView imgProfile;
         @BindView(R.id.show_message)
         TextView showMessage;
+        @BindView(R.id.seen)
+        TextView isSeen;
 
         public ViewHolder(View view) {
             super(view);

@@ -6,8 +6,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +62,8 @@ public class ConsultationActivity extends AppCompatActivity {
     RecyclerView recyclerview;
     @BindView(R.id.txt_message)
     EditText txtMessage;
+    @BindView(R.id.txt_countdown)
+    TextView txtCountdown;
 
     Session session;
 
@@ -70,6 +75,10 @@ public class ConsultationActivity extends AppCompatActivity {
 
     Konsultasi konsultasi;
 
+    ValueEventListener seenListener;
+
+    Long duration;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +88,7 @@ public class ConsultationActivity extends AppCompatActivity {
         session = new Session(this);
 
         konsultasi = (Konsultasi) getIntent().getSerializableExtra("konsultasi");
+        duration = getIntent().getLongExtra("diff", 0);
 
         recyclerview.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -131,6 +141,33 @@ public class ConsultationActivity extends AppCompatActivity {
 
             }
         });
+
+        seenMessage(konsultasiId);
+        countDown();
+    }
+
+    private void seenMessage(final String konsultasiId){
+        seenListener = FirebaseDatabase.getInstance().getReference("Chats").orderByChild("id_konsultasi")
+                .equalTo(konsultasiId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    assert chat != null;
+                    if (chat.getPenerima().equals(konsultasi.getUserId()) && chat.getPengirim().equals(konsultasi.getApotekerId())){
+                        Log.e("which chat", chat.getPenerima() + "=" + konsultasi.getUserId() + "pesan: " + chat.getPesan());
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("isseen", true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void sendMessage(String pesan) {
@@ -141,6 +178,7 @@ public class ConsultationActivity extends AppCompatActivity {
         hashMap.put("pengirim", konsultasi.getUserId());
         hashMap.put("penerima", konsultasi.getApotekerId());
         hashMap.put("pesan", pesan);
+        hashMap.put("isseen", false);
 
         reference.child("Chats").push().setValue(hashMap);
     }
@@ -201,5 +239,38 @@ public class ConsultationActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+
+    public void countDown() {
+
+        Log.e("duration on c", duration.toString());
+
+        new CountDownTimer(duration, 1000) {
+
+            @SuppressLint({"DefaultLocale", "SetTextI18n"})
+            public void onTick(long millisUntilFinished) {
+                txtCountdown.setText("" + String.format("%d : %d",
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+
+        }.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //reference.removeEventListener(seenListener);
     }
 }

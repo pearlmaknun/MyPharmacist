@@ -20,6 +20,8 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,19 +29,23 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.pearlmaknun.mypharmacist.ConsultationActivity;
 import io.pearlmaknun.mypharmacist.R;
+import io.pearlmaknun.mypharmacist.RatingActivity;
 import io.pearlmaknun.mypharmacist.adapter.NearestApotekerAdapter;
 import io.pearlmaknun.mypharmacist.data.Session;
 import io.pearlmaknun.mypharmacist.helper.GpsTrackers;
 import io.pearlmaknun.mypharmacist.model.CheckActivityResponse;
 import io.pearlmaknun.mypharmacist.model.Konsultasi;
+import io.pearlmaknun.mypharmacist.model.LoginResponse;
 import io.pearlmaknun.mypharmacist.model.NearestApoteker;
 import io.pearlmaknun.mypharmacist.model.NearestApotekerResponse;
 import io.pearlmaknun.mypharmacist.model.RequestConsultation;
+import io.pearlmaknun.mypharmacist.util.CommonUtil;
 import io.pearlmaknun.mypharmacist.util.DialogUtils;
 
 import static io.pearlmaknun.mypharmacist.data.Constan.BERLANGSUNG;
 import static io.pearlmaknun.mypharmacist.data.Constan.CHECK_HAS_CONSULTATION;
 import static io.pearlmaknun.mypharmacist.data.Constan.DIPROSES;
+import static io.pearlmaknun.mypharmacist.data.Constan.END_CHAT;
 import static io.pearlmaknun.mypharmacist.data.Constan.NEAREST_APOTEKER;
 import static io.pearlmaknun.mypharmacist.data.Constan.REQUEST_CONSULTATION;
 
@@ -65,6 +71,8 @@ public class KonsultasiFragment extends Fragment {
 
     NearestApotekerAdapter adapter;
     Konsultasi konsultasi;
+
+    long diff = 0;
 
     public KonsultasiFragment() {
         // Required empty public constructor
@@ -190,35 +198,67 @@ public class KonsultasiFragment extends Fragment {
     private void check() {
         Log.e("location: ", "" + lastPosition.latitude + ", " + lastPosition.longitude);
         //DialogUtils.openDialog(getActivity());
-        AndroidNetworking.get(CHECK_HAS_CONSULTATION)
-                .addHeaders("Content-Type", "application/json")
-                .addHeaders("device_id", session.getDeviceId())
-                .addHeaders("Authorization", "Bearer " + session.getToken())
-                .build()
-                .getAsObject(CheckActivityResponse.class, new ParsedRequestListener() {
-                    @Override
-                    public void onResponse(Object response) {
-                        //DialogUtils.closeDialog();
-                        if (response instanceof CheckActivityResponse) {
-                            CheckActivityResponse response1 = (CheckActivityResponse) response;
-                            Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
-                            if (response1.getStatus()) {
-                                konsultasi = response1.getData();
-                                layout(response1.getData().getStatusChat());
-                            } else {
-                                layout("-1");
+        if (lastPosition != null){
+            AndroidNetworking.get(CHECK_HAS_CONSULTATION)
+                    .addHeaders("Content-Type", "application/json")
+                    .addHeaders("device_id", session.getDeviceId())
+                    .addHeaders("Authorization", "Bearer " + session.getToken())
+                    .build()
+                    .getAsObject(CheckActivityResponse.class, new ParsedRequestListener() {
+                        @Override
+                        public void onResponse(Object response) {
+                            //DialogUtils.closeDialog();
+                            if (response instanceof CheckActivityResponse) {
+                                CheckActivityResponse response1 = (CheckActivityResponse) response;
                                 Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
+                                if (response1.getStatus()) {
+                                    konsultasi = response1.getData();
+                                    String currentTime = CommonUtil.getCurrentDate();
+                                    Log.d("current_time", currentTime);
+                                    String startDate = konsultasi.getStartChat();
+                                    Log.d("start_con", "" + startDate);
+
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                                    try {
+                                        Date d2 = format.parse(currentTime);
+                                        Date d1 = format.parse(startDate);
+
+                                        diff = d2.getTime() - d1.getTime();
+                                        Log.d("diff", "" + diff);
+
+                                        long timeLimit = Long.valueOf(konsultasi.getChatDuration()) * 60 * 1000;
+                                        diff = timeLimit - diff;
+                                        Log.d("cerecall time", konsultasi.getChatDuration());
+
+                                        if (diff < timeLimit) {
+                                            Log.d("CLICKED CHAT", "" + diff);
+                                            layout(response1.getData().getStatusChat());
+                                        } else {
+                                            endChat();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                } else {
+                                    layout("-1");
+                                    Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        //DialogUtils.closeDialog();
-                        Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
-                    }
+                        @Override
+                        public void onError(ANError anError) {
+                            //DialogUtils.closeDialog();
+                            Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
+                        }
 
-                });
+                    });
+        }else{
+            Toast.makeText(getContext(), "Failed get current location", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void layout(String status){
@@ -247,6 +287,41 @@ public class KonsultasiFragment extends Fragment {
         }
     }
 
+    private void endChat(){
+        DialogUtils.openDialog(getContext());
+        AndroidNetworking.post(END_CHAT + konsultasi.getChatId())
+                .addHeaders("Content-Type", "application/json")
+                .addHeaders("Authorization", "Bearer " + session.getToken())
+                .addHeaders("device_id", session.getDeviceId())
+                .build()
+                .getAsObject(LoginResponse.class, new ParsedRequestListener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        if (response instanceof LoginResponse) {
+                            LoginResponse response1 = (LoginResponse) response;
+                            Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
+                            if (response1.getStatus()) {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(getContext(), response1.getMessage(), Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(getContext(), RatingActivity.class);
+                                i.putExtra("chatid", konsultasi.getChatId());
+                                startActivity(i);
+                            } else {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(getContext(), response1.getMessage(), Toast.LENGTH_LONG).show();
+                                Log.e("RESPONSE SUCCESS", response1.getMessage() + new Gson().toJson(response1));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        DialogUtils.closeDialog();
+                        Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
+                    }
+                });
+    }
+
     @OnClick({R.id.search, R.id.lanjutkan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -256,6 +331,7 @@ public class KonsultasiFragment extends Fragment {
             case R.id.lanjutkan:
                 Intent intent = new Intent(getContext(), ConsultationActivity.class);
                 intent.putExtra("konsultasi", konsultasi);
+                intent.putExtra("diff", diff);
                 startActivity(intent);
                 break;
             case R.id.mulai:
