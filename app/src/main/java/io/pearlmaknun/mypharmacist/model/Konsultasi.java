@@ -27,13 +27,22 @@ public class Konsultasi implements Serializable {
     private String updateChat;
     @SerializedName("end_chat")
     @Expose
-    private Object endChat;
+    private String endChat;
     @SerializedName("chat_duration")
     @Expose
     private String chatDuration;
     @SerializedName("status_chat")
     @Expose
     private String statusChat;
+    @SerializedName("rating_star")
+    @Expose
+    private String ratingStar;
+    @SerializedName("rating_comment")
+    @Expose
+    private String ratingComment;
+    @SerializedName("rating_time")
+    @Expose
+    private String ratingTime;
 
     public String getChatId() {
         return chatId;
@@ -83,11 +92,11 @@ public class Konsultasi implements Serializable {
         this.updateChat = updateChat;
     }
 
-    public Object getEndChat() {
+    public String getEndChat() {
         return endChat;
     }
 
-    public void setEndChat(Object endChat) {
+    public void setEndChat(String endChat) {
         this.endChat = endChat;
     }
 
@@ -105,5 +114,29 @@ public class Konsultasi implements Serializable {
 
     public void setStatusChat(String statusChat) {
         this.statusChat = statusChat;
+    }
+
+    public String getRatingStar() {
+        return ratingStar;
+    }
+
+    public void setRatingStar(String ratingStar) {
+        this.ratingStar = ratingStar;
+    }
+
+    public String getRatingComment() {
+        return ratingComment;
+    }
+
+    public void setRatingComment(String ratingComment) {
+        this.ratingComment = ratingComment;
+    }
+
+    public String getRatingTime() {
+        return ratingTime;
+    }
+
+    public void setRatingTime(String ratingTime) {
+        this.ratingTime = ratingTime;
     }
 }

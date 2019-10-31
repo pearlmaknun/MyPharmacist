@@ -24,6 +24,7 @@ public class Constan {
     public static final String CHECK_HAS_CONSULTATION = BASE_URL_USER + "/statuscon";
     public static final String REQUEST_CONSULTATION = BASE_URL_USER + "/request";
     public static final String END_CHAT = BASE_URL_USER + "/endchat/";
+    public static final String REPORT = BASE_URL_USER + "/report/";
     public static final String RATE_CHAT = BASE_URL_USER + "/ratechat/";
 
     //status chat

@@ -1,14 +1,19 @@
 package io.pearlmaknun.mypharmacist.fragment;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
@@ -27,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.pearlmaknun.mypharmacist.ApotekListActivity;
 import io.pearlmaknun.mypharmacist.ConsultationActivity;
 import io.pearlmaknun.mypharmacist.R;
 import io.pearlmaknun.mypharmacist.RatingActivity;
@@ -63,6 +74,8 @@ public class KonsultasiFragment extends Fragment {
     RelativeLayout layoutWaiting;
     @BindView(R.id.layout_diterima)
     RelativeLayout layoutDiterima;
+    @BindView(R.id.ic_local_hospital)
+    ImageView btnApotek;
 
     Session session;
 
@@ -73,6 +86,7 @@ public class KonsultasiFragment extends Fragment {
     Konsultasi konsultasi;
 
     long diff = 0;
+    boolean statusList = false;
 
     public KonsultasiFragment() {
         // Required empty public constructor
@@ -89,7 +103,7 @@ public class KonsultasiFragment extends Fragment {
 
         gps = new GpsTrackers(getContext());
         lastPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
-
+        requestLocationUpdates();
         initView();
 
         return view;
@@ -115,7 +129,7 @@ public class KonsultasiFragment extends Fragment {
 
     private void discover() {
         Log.e("location: ", "" + lastPosition.latitude + ", " + lastPosition.longitude);
-        DialogUtils.openDialog(getActivity());
+        //DialogUtils.openDialog(getActivity());
         AndroidNetworking.get(NEAREST_APOTEKER)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("device_id", session.getDeviceId())
@@ -127,13 +141,14 @@ public class KonsultasiFragment extends Fragment {
                 .getAsObject(NearestApotekerResponse.class, new ParsedRequestListener() {
                     @Override
                     public void onResponse(Object response) {
-                        DialogUtils.closeDialog();
+                        //DialogUtils.closeDialog();
                         if (response instanceof NearestApotekerResponse) {
                             NearestApotekerResponse response1 = (NearestApotekerResponse) response;
                             Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
                             if (response1.getStatus()) {
                                 layoutAktif.setVisibility(View.GONE);
                                 layoutList.setVisibility(View.VISIBLE);
+                                statusList = true;
                                 layoutCari.setVisibility(View.GONE);
                                 layoutDiterima.setVisibility(View.GONE);
                                 layoutWaiting.setVisibility(View.GONE);
@@ -153,7 +168,7 @@ public class KonsultasiFragment extends Fragment {
 
                     @Override
                     public void onError(ANError anError) {
-                        DialogUtils.closeDialog();
+                        //DialogUtils.closeDialog();
                         Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
                     }
 
@@ -267,12 +282,14 @@ public class KonsultasiFragment extends Fragment {
                 layoutAktif.setVisibility(View.GONE);
                 layoutList.setVisibility(View.GONE);
                 layoutCari.setVisibility(View.GONE);
+                statusList = false;
                 layoutDiterima.setVisibility(View.GONE);
                 layoutWaiting.setVisibility(View.VISIBLE);
                 break;
             case BERLANGSUNG:
                 layoutAktif.setVisibility(View.VISIBLE);
                 layoutList.setVisibility(View.GONE);
+                statusList = false;
                 layoutCari.setVisibility(View.GONE);
                 layoutDiterima.setVisibility(View.GONE);
                 layoutWaiting.setVisibility(View.GONE);
@@ -280,6 +297,7 @@ public class KonsultasiFragment extends Fragment {
             default:
                 layoutAktif.setVisibility(View.GONE);
                 layoutList.setVisibility(View.GONE);
+                statusList = false;
                 layoutCari.setVisibility(View.VISIBLE);
                 layoutDiterima.setVisibility(View.GONE);
                 layoutWaiting.setVisibility(View.GONE);
@@ -322,7 +340,34 @@ public class KonsultasiFragment extends Fragment {
                 });
     }
 
-    @OnClick({R.id.search, R.id.lanjutkan})
+    private void requestLocationUpdates() {
+        LocationRequest request = new LocationRequest();
+        //Specify how often your app should request the device’s location
+        request.setInterval(5000);
+        //Get the most accurate location data available//
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(getContext());
+        int permission = ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        //If the app currently has access to the location permission...//
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            //...then request location updates//
+            client.requestLocationUpdates(request, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    gps = new GpsTrackers(getContext());
+                    lastPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+                    Log.e("location realtime", ""+lastPosition.latitude +", "+lastPosition.longitude);
+                    if (lastPosition.latitude != 0 && lastPosition.longitude != 0 && statusList){
+                        discover();
+                    }
+
+                }
+            }, null);
+        }
+    }
+
+    @OnClick({R.id.search, R.id.lanjutkan, R.id.ic_local_hospital})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search:
@@ -334,7 +379,9 @@ public class KonsultasiFragment extends Fragment {
                 intent.putExtra("diff", diff);
                 startActivity(intent);
                 break;
-            case R.id.mulai:
+            case R.id.ic_local_hospital:
+                Intent i = new Intent(getContext(), ApotekListActivity.class);
+                startActivity(i);
                 break;
         }
     }

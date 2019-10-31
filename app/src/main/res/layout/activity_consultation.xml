@@ -58,13 +58,12 @@
                     android:textColor="@color/putih"/>
 
                 <ImageView
-                    android:id="@+id/btn_"
+                    android:id="@+id/report"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_report"
-                    android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
-                    />
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_report" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

@@ -47,6 +47,7 @@ import io.pearlmaknun.mypharmacist.model.UserApoteker;
 import io.pearlmaknun.mypharmacist.util.DialogUtils;
 
 import static io.pearlmaknun.mypharmacist.data.Constan.END_CHAT;
+import static io.pearlmaknun.mypharmacist.data.Constan.REPORT;
 
 public class ConsultationActivity extends AppCompatActivity {
 
@@ -183,7 +184,7 @@ public class ConsultationActivity extends AppCompatActivity {
         reference.child("Chats").push().setValue(hashMap);
     }
 
-    @OnClick({R.id.btn_back, R.id.btn_send, R.id.txt_end})
+    @OnClick({R.id.btn_back, R.id.btn_send, R.id.txt_end, R.id.report})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
@@ -200,6 +201,9 @@ public class ConsultationActivity extends AppCompatActivity {
                 break;
             case R.id.txt_end:
                 endChat();
+                break;
+            case R.id.report:
+                reportChat();
                 break;
         }
     }
@@ -220,6 +224,7 @@ public class ConsultationActivity extends AppCompatActivity {
                             if (response1.getStatus()) {
                                 DialogUtils.closeDialog();
                                 Toast.makeText(ConsultationActivity.this, response1.getMessage(), Toast.LENGTH_LONG).show();
+                                sendMessage("#end#");
                                 Intent i = new Intent(ConsultationActivity.this, RatingActivity.class);
                                 i.putExtra("chatid", konsultasi.getChatId());
                                 startActivity(i);
@@ -261,6 +266,43 @@ public class ConsultationActivity extends AppCompatActivity {
             }
 
         }.start();
+    }
+
+    private void reportChat(){
+        DialogUtils.openDialog(this);
+        AndroidNetworking.post(REPORT + konsultasi.getChatId())
+                .addHeaders("Content-Type", "application/json")
+                .addHeaders("Authorization", "Bearer " + session.getToken())
+                .addHeaders("device_id", session.getDeviceId())
+                .build()
+                .getAsObject(LoginResponse.class, new ParsedRequestListener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        if (response instanceof LoginResponse) {
+                            LoginResponse response1 = (LoginResponse) response;
+                            Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
+                            if (response1.getStatus()) {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(ConsultationActivity.this, response1.getMessage(), Toast.LENGTH_LONG).show();
+                                /*Intent i = new Intent(ConsultationActivity.this, RatingActivity.class);
+                                i.putExtra("chatid", konsultasi.getChatId());
+                                startActivity(i);*/
+                                finish();
+                            } else {
+                                DialogUtils.closeDialog();
+                                Toast.makeText(ConsultationActivity.this, response1.getMessage(), Toast.LENGTH_LONG).show();
+                                Log.e("RESPONSE SUCCESS", response1.getMessage() + new Gson().toJson(response1));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        DialogUtils.closeDialog();
+                        Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
+                    }
+
+                });
     }
 
     @Override
