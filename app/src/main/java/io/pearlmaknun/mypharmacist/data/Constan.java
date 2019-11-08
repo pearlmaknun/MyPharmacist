@@ -3,7 +3,7 @@ package io.pearlmaknun.mypharmacist.data;
 public class Constan {
 
     //public static final String BASE_URL = "http://localhost:8080";
-    public static final String BASE_URL = "https://anaksulung.id/public";
+    public static final String BASE_URL = "http://anaksulung.id/public";
     public static final String BASE_URL_USER = BASE_URL + "/api";
 
     //auth

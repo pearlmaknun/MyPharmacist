@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_local_library"
         android:title="@string/discover" />
 
+<!--    <item-->
+<!--        android:id="@+id/navigation_home"-->
+<!--        android:icon="@drawable/ic_dashboard"-->
+<!--        android:title="@string/home" />-->
+
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_account_circle"

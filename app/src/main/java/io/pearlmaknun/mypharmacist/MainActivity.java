@@ -14,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.pearlmaknun.mypharmacist.fragment.DiscoverFragment;
+import io.pearlmaknun.mypharmacist.fragment.HomeFragment;
 import io.pearlmaknun.mypharmacist.fragment.KonsultasiFragment;
 import io.pearlmaknun.mypharmacist.fragment.ProfileFragment;
 
@@ -50,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fragment = new DiscoverFragment();
                 callFragment(fragment);
                 break;
+//            case R.id.navigation_home:
+//                fragment = new HomeFragment();
+//                callFragment(fragment);
+//                break;
             case R.id.navigation_profile:
                 fragment = new ProfileFragment();
                 callFragment(fragment);

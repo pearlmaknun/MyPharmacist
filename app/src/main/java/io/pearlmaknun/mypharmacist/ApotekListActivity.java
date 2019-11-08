@@ -76,6 +76,7 @@ public class ApotekListActivity extends AppCompatActivity {
     }
 
     public void discover(){
+        DialogUtils.openDialog(this);
         AndroidNetworking.get(NEAREST_APOTEK)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("device_id", session.getDeviceId())
@@ -87,6 +88,7 @@ public class ApotekListActivity extends AppCompatActivity {
                 .getAsObject(ApotekResponse.class, new ParsedRequestListener() {
                     @Override
                     public void onResponse(Object response) {
+                        DialogUtils.closeDialog();
                         if (response instanceof ApotekResponse) {
                             ApotekResponse response1 = (ApotekResponse) response;
                             Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
@@ -103,6 +105,7 @@ public class ApotekListActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
+                        DialogUtils.closeDialog();
                         Log.e("RESPONSE GAGAL", "" + new Gson().toJson(anError.getErrorBody() + anError.getMessage()));
                     }
 

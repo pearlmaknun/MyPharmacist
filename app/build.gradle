@@ -31,6 +31,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
 
+    //carousel
+    implementation 'com.synnapps:carouselview:0.1.5'
+
     //networking
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
