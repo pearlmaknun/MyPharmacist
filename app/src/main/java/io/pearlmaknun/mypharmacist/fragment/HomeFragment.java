@@ -11,7 +11,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +27,12 @@ import io.pearlmaknun.mypharmacist.data.Session;
 
 public class HomeFragment extends Fragment {
 
+    @BindView(R.id.slider)
+    CarouselView slider;
+
     Session session;
+
+    int[] sampleImages = {R.drawable.banner};
 
     public HomeFragment() {
         // Required empty public constructor
@@ -38,8 +47,13 @@ public class HomeFragment extends Fragment {
 
         session = new Session(getContext());
 
+        slider.setPageCount(sampleImages.length);
+        slider.setImageListener(imageListener);
+
         return view;
     }
+
+    ImageListener imageListener = (position, imageView) -> imageView.setImageResource(sampleImages[position]);
 
     /*@OnClick({R.id.btn_ask, R.id.btn_consultation, R.id.btn_apotek, R.id.btn_education})
     public void onViewClicked(View view) {

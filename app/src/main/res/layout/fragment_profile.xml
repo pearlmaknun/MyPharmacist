@@ -108,4 +108,22 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/editprofil"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/h3"
+            android:textAllCaps="true"
+            android:text="EDIT"
+            android:padding="@dimen/tepi"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"/>
+
+    </androidx.cardview.widget.CardView>
+
 </LinearLayout>

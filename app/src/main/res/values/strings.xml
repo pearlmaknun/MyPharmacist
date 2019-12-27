@@ -7,7 +7,7 @@
     <string name="masuk">Masuk</string>
     <string name="daftar_akun_baru">Daftar Akun Baru</string>
     <string name="nomor_telefon">Nomor Telefon</string>
-    <string name="domisili">Domisili</string>
+    <string name="domisili">Alamat</string>
     <string name="nama_lengkap">Nama Lengkap</string>
     <string name="daftar">Daftar</string>
     <string name="belum_punya_akun">Belum punya akun?</string>
@@ -15,7 +15,7 @@
     <string name="konfirmasi_password">Konfirmasi Password</string>
     <string name="consulting">Konsultasi</string>
     <string name="discover">Discover</string>
-    <string name="profile">Profil</string>
+    <string name="profile">Profile</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -25,4 +25,9 @@
     <string name="submit">SUBMIT</string>
     <string name="beranda">Beranda</string>
     <string name="home">Home</string>
+    <string name="konsultasi_online">Konsultasi Online</string>
+    <string name="deskripsi_kosultasi">Berkonsultasi dengan apoteker terpercaya dengan kenyamanan privasi.</string>
+    <string name="deskripsi_appointment">Buat janji dengan apoteker untuk berkonseltasi dengan apoteker disekitar anda.</string>
+    <string name="tahu">Tahu?</string>
+    <string name="pemberitahuan">Pemberitahuan</string>
 </resources>

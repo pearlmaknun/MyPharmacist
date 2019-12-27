@@ -96,7 +96,7 @@ public class ConsultationActivity extends AppCompatActivity {
         //linearLayoutManager.setStackFromEnd(true);
         recyclerview.setLayoutManager(linearLayoutManager);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase.getInstance()
                 .getReference("Apoteker")
                 .orderByChild("apoteker_id")

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
-            fragment = new KonsultasiFragment();
+            fragment = new HomeFragment();
             callFragment(fragment);
         }
     }
@@ -43,18 +43,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
         switch (id){
-            case R.id.navigation_consulting:
+            /*case R.id.navigation_notification:
                 fragment = new KonsultasiFragment();
                 callFragment(fragment);
                 break;
             case R.id.navigation_discover:
                 fragment = new DiscoverFragment();
                 callFragment(fragment);
+                break;*/
+            case R.id.navigation_home:
+                fragment = new HomeFragment();
+                callFragment(fragment);
                 break;
-//            case R.id.navigation_home:
-//                fragment = new HomeFragment();
-//                callFragment(fragment);
-//                break;
             case R.id.navigation_profile:
                 fragment = new ProfileFragment();
                 callFragment(fragment);

@@ -1,6 +1,5 @@
 package io.pearlmaknun.mypharmacist.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,19 +14,18 @@ import androidx.fragment.app.Fragment;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.pearlmaknun.mypharmacist.EditProfil;
 import io.pearlmaknun.mypharmacist.LoginActivity;
 import io.pearlmaknun.mypharmacist.R;
 import io.pearlmaknun.mypharmacist.data.Session;
 import io.pearlmaknun.mypharmacist.model.Profile;
 import io.pearlmaknun.mypharmacist.model.ProfileResponse;
-import io.pearlmaknun.mypharmacist.util.CommonUtil;
 import io.pearlmaknun.mypharmacist.util.DialogUtils;
 
 import static io.pearlmaknun.mypharmacist.data.Constan.LOGOUT;
@@ -133,5 +131,12 @@ public class ProfileFragment extends Fragment {
     @OnClick(R.id.logout)
     public void onViewClicked() {
         DialogUtils.dialogYesNo(getActivity(), "Anda yakin ingin keluar ?", (dialog, which) -> logout(), (dialog, which) -> dialog.dismiss());
+    }
+
+    @OnClick(R.id.editprofil)
+    public void onViewClickedEdit() {
+        Intent i = new Intent(getActivity(), EditProfil.class);
+        i.putExtra("profil", profile);
+        startActivity(i);
     }
 }

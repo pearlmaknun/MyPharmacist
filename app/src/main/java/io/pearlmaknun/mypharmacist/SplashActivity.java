@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
     Session session;
     int count = 3;
 
-    FirebaseUser firebaseUser;
+    //FirebaseUser firebaseUser;
 
     @Override
     protected void onStart() {
@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
 
         requestPermission();
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             final Handler handler = new Handler();
             handler.postDelayed(() -> {
-                if (session.isLoggedIn() && firebaseUser != null) {
+                if (session.isLoggedIn()/* && firebaseUser != null*/) {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 } else {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));

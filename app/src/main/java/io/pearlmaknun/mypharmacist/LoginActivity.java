@@ -58,8 +58,8 @@ public class LoginActivity extends AppCompatActivity {
     double lat, lng;
     private FusedLocationProviderClient fusedLocationClient;
 
-    FirebaseAuth auth;
-    DatabaseReference reference;
+    /*FirebaseAuth auth;
+    DatabaseReference reference;*/
 
     @SuppressLint("MissingPermission")
     @Override
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-        auth = FirebaseAuth.getInstance();
+        /*auth = FirebaseAuth.getInstance();*/
 
         @SuppressLint("HardwareIds")
         String device_id = Settings.Secure.getString(getContentResolver(),
@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addBodyParameter("device_id", session.getDeviceId())
                 .addBodyParameter("latitude", String.valueOf(lastPosition.latitude))
                 .addBodyParameter("longitude", String.valueOf(lastPosition.longitude))
+                .addBodyParameter("package_name", getApplicationContext().getPackageName())
                 .build()
                 .getAsObject(LoginResponse.class, new ParsedRequestListener() {
                     @Override
@@ -132,7 +133,12 @@ public class LoginActivity extends AppCompatActivity {
                             if (response1.getStatus()) {
                                 session.createLoginSession(response1.getData());
                                 session.setToken(response1.getToken());
-                                loginFirebase(email.getText().toString(), password.getText().toString());
+                                //loginFirebase(email.getText().toString(), password.getText().toString());
+                                DialogUtils.closeDialog();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
                             } else {
                                 Log.e("RESPONSE SUCCESS", "" + new Gson().toJson(response1));
                             }
@@ -148,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void loginFirebase(String email, String password){
+    /*private void loginFirebase(String email, String password){
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -165,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
+    }*/
 
     @OnClick({R.id.login, R.id.daftar})
     public void onViewClicked(View view) {

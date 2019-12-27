@@ -6,4 +6,5 @@
     <dimen name="h3">18sp</dimen>
     <dimen name="space">5dp</dimen>
     <dimen name="card_tepi">10dp</dimen>
+    <dimen name="tiny6dp">6dp</dimen>
 </resources>

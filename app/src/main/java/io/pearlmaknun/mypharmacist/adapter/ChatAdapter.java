@@ -10,10 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,7 +30,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     Session session;
 
-    FirebaseUser firebaseUser;
+    //FirebaseUser firebaseUser;
 
     public ChatAdapter(Context context, List<Chat> chats, String imgUrl) {
         this.context = context;
@@ -99,7 +95,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         session = new Session(context);
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         String id = session.getUser().getUserId();
         Log.e("id chat", id+chats.get(position).getPengirim());
         //return MSG_TYPE_RIGHT;
