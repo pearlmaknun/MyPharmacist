@@ -8,10 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.google.gson.Gson;
@@ -24,9 +26,10 @@ import io.pearlmaknun.mypharmacist.data.Session;
 import io.pearlmaknun.mypharmacist.model.Konsultasi;
 import io.pearlmaknun.mypharmacist.model.Pertemuan;
 import io.pearlmaknun.mypharmacist.model.PertemuanResponse;
+import io.pearlmaknun.mypharmacist.model.RegisterResponse;
 import io.pearlmaknun.mypharmacist.util.DialogUtils;
 
-import static io.pearlmaknun.mypharmacist.data.Constan.CHECK_HAS_APPOINMENT;
+import static io.pearlmaknun.mypharmacist.data.Constan.PERTEMUAN;
 
 public class MainPertemuanActivity extends AppCompatActivity {
 
@@ -44,6 +47,8 @@ public class MainPertemuanActivity extends AppCompatActivity {
     TextView detail;
     @BindView(R.id.status)
     TextView status;
+    @BindView(R.id.submit)
+    Button submit;
 
     Session session;
 
@@ -67,7 +72,7 @@ public class MainPertemuanActivity extends AppCompatActivity {
 
     private void check() {
         DialogUtils.openDialog(this);
-        AndroidNetworking.get(CHECK_HAS_APPOINMENT + konsultasi.getChatId())
+        AndroidNetworking.get(PERTEMUAN + "/" +konsultasi.getChatId())
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("device_id", session.getDeviceId())
                 .addHeaders("Authorization", "Bearer " + session.getToken())
@@ -115,7 +120,7 @@ public class MainPertemuanActivity extends AppCompatActivity {
 
     @OnClick(R.id.submit)
     public void onViewClicked(View view) {
-
+        setujui();
     }
 
     @OnClick(R.id.map)
@@ -130,5 +135,38 @@ public class MainPertemuanActivity extends AppCompatActivity {
         String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Float.valueOf(lat), Float.valueOf(lng));
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         startActivity(intent);
+    }
+
+    private void setujui() {
+        DialogUtils.openDialog(this);
+        ANRequest.PutRequestBuilder putRequestBuilder = new ANRequest.PutRequestBuilder(PERTEMUAN + "/" + pertemuan.getPertemuanId());
+        putRequestBuilder
+                .addHeaders("Content-Type", "application/json")
+                .addHeaders("Authorization", "Bearer " + session.getToken())
+                .addHeaders("device_id", session.getDeviceId());
+        putRequestBuilder.build()
+                .getAsObject(RegisterResponse.class, new ParsedRequestListener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        if (response instanceof RegisterResponse) {
+                            RegisterResponse response1 = (RegisterResponse) response;
+                            DialogUtils.closeDialog();
+                            if (response1.getStatus()) {
+                                Toast.makeText(MainPertemuanActivity.this, "Anda Telah Menyetujui Perjanjian Pertemuan", Toast.LENGTH_SHORT).show();
+                                submit.setVisibility(View.GONE);
+                                status.setText("Status: Disetujui kedua belah pihak");
+                            } else {
+                                Toast.makeText(MainPertemuanActivity.this, response1.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        DialogUtils.closeDialog();
+                        Toast.makeText(MainPertemuanActivity.this, "Mohon maaf, kesalahan teknis !", Toast.LENGTH_SHORT).show();
+                    }
+
+                });
     }
 }
