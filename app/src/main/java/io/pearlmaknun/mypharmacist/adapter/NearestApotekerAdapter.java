@@ -8,11 +8,15 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.pearlmaknun.mypharmacist.R;
 import io.pearlmaknun.mypharmacist.model.NearestApoteker;
 
@@ -28,6 +32,8 @@ public class NearestApotekerAdapter extends RecyclerView.Adapter<NearestApoteker
         TextView nama;
         @BindView(R.id.jarak)
         TextView jarak;
+        @BindView(R.id.image)
+        CircleImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -60,6 +66,12 @@ public class NearestApotekerAdapter extends RecyclerView.Adapter<NearestApoteker
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final NearestApoteker item = list.get(position);
+        if(item.getApotekerPhoto() != null){
+            Glide.with(context)
+                    .load(item.getApotekerPhoto())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.image);
+        }
         holder.nama.setText(item.getApotekerName());
         holder.jarak.setText(item.getJarak() + " KM");
         holder.itemView.setOnClickListener(v -> mOnItemClickListener.onClick(position));

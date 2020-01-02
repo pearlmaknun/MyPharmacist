@@ -21,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.pearlmaknun.mypharmacist.ApotekListActivity;
+import io.pearlmaknun.mypharmacist.KonsultasiActivity;
 import io.pearlmaknun.mypharmacist.R;
 import io.pearlmaknun.mypharmacist.SearchApotekerActivity;
 import io.pearlmaknun.mypharmacist.data.Session;
@@ -55,10 +56,14 @@ public class HomeFragment extends Fragment {
 
     ImageListener imageListener = (position, imageView) -> imageView.setImageResource(sampleImages[position]);
 
-    /*@OnClick({R.id.btn_ask, R.id.btn_consultation, R.id.btn_apotek, R.id.btn_education})
+    @OnClick({R.id.menu_konsultasi/*R.id.btn_ask, R.id.btn_consultation, R.id.btn_apotek, R.id.btn_education*/})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_ask:
+            case R.id.menu_konsultasi:
+                Intent intent = new Intent(getContext(), KonsultasiActivity.class);
+                startActivity(intent);
+                break;
+            /*case R.id.btn_ask:
                 Toast.makeText(getContext(), "Fitur Ask ini belum berfungsi!", Toast.LENGTH_LONG).show();
                 break;
             case R.id.btn_consultation:
@@ -71,7 +76,7 @@ public class HomeFragment extends Fragment {
                 break;
             case R.id.btn_education:
                 Toast.makeText(getContext(), "Fitur Edu ini belum berfungsi!", Toast.LENGTH_LONG).show();
-                break;
+                break;*/
         }
-    }*/
+    }
 }

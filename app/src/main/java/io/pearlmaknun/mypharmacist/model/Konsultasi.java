@@ -43,6 +43,12 @@ public class Konsultasi implements Serializable {
     @SerializedName("rating_time")
     @Expose
     private String ratingTime;
+    @SerializedName("apoteker_name")
+    @Expose
+    private String apotekerName;
+    @SerializedName("user_name")
+    @Expose
+    private String userName;
 
     public String getChatId() {
         return chatId;
@@ -138,5 +144,21 @@ public class Konsultasi implements Serializable {
 
     public void setRatingTime(String ratingTime) {
         this.ratingTime = ratingTime;
+    }
+
+    public String getApotekerName() {
+        return apotekerName;
+    }
+
+    public void setApotekerName(String apotekerName) {
+        this.apotekerName = apotekerName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

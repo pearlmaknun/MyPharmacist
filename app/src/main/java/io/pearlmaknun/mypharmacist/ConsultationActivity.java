@@ -184,7 +184,7 @@ public class ConsultationActivity extends AppCompatActivity {
         reference.child("Chats").push().setValue(hashMap);
     }
 
-    @OnClick({R.id.btn_back, R.id.btn_send, R.id.txt_end, R.id.report})
+    @OnClick({R.id.btn_back, R.id.btn_send, R.id.txt_end, R.id.report, R.id.teruskan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
@@ -204,6 +204,11 @@ public class ConsultationActivity extends AppCompatActivity {
                 break;
             case R.id.report:
                 reportChat();
+                break;
+            case R.id.teruskan:
+                Intent i = new Intent(ConsultationActivity.this, MainPertemuanActivity.class);
+                i.putExtra("konsultasi", konsultasi);
+                startActivity(i);
                 break;
         }
     }
