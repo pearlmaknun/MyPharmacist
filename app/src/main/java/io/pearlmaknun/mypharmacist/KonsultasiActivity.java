@@ -272,7 +272,7 @@ public class KonsultasiActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick({R.id.search, R.id.lanjutkan, R.id.ic_history})
+    @OnClick({R.id.search, R.id.lanjutkan, R.id.ic_history, R.id.ic_history_janji})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search:
@@ -287,6 +287,10 @@ public class KonsultasiActivity extends AppCompatActivity {
             case R.id.ic_history:
                 Intent i = new Intent(getApplicationContext(), HistoryActivity.class);
                 startActivity(i);
+                break;
+            case R.id.ic_history_janji:
+                Intent a = new Intent(getApplicationContext(), HistoryPertemuan.class);
+                startActivity(a);
                 break;
         }
     }

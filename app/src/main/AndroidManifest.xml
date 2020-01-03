@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainPertemuanActivity"></activity>
+        <activity android:name=".HistoryPertemuan"></activity>
+        <activity android:name=".MainPertemuanActivity" />
         <activity android:name=".AppointmentActivity" />
         <activity android:name=".KonsultasiActivity" />
         <activity android:name=".EditProfil" />
