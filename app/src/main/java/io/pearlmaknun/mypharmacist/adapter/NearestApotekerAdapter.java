@@ -66,14 +66,16 @@ public class NearestApotekerAdapter extends RecyclerView.Adapter<NearestApoteker
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final NearestApoteker item = list.get(position);
-        if(item.getApotekerPhoto() != null){
+        /*if(item.getApotekerPhoto() != null){
             Glide.with(context)
                     .load(item.getApotekerPhoto())
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.image);
-        }
+        }*/
         holder.nama.setText(item.getApotekerName());
-        holder.jarak.setText(item.getJarak() + " KM");
+        double value = Double.valueOf(item.getJarak());
+        double roundOff = (double) Math.round(value * 100) / 100;
+        holder.jarak.setText(roundOff + " KM");
         holder.itemView.setOnClickListener(v -> mOnItemClickListener.onClick(position));
     }
 

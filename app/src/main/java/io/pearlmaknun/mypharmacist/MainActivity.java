@@ -2,7 +2,6 @@ package io.pearlmaknun.mypharmacist;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.pearlmaknun.mypharmacist.fragment.DiscoverFragment;
 import io.pearlmaknun.mypharmacist.fragment.HomeFragment;
-import io.pearlmaknun.mypharmacist.fragment.KonsultasiFragment;
 import io.pearlmaknun.mypharmacist.fragment.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {

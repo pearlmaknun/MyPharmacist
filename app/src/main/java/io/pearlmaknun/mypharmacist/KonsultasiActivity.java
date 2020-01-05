@@ -67,6 +67,8 @@ public class KonsultasiActivity extends AppCompatActivity {
     RelativeLayout layoutDiterima;
     @BindView(R.id.ic_history)
     ImageView btnHistory;
+    @BindView(R.id.ic_history_janji)
+    ImageView btnJanji;
 
     Session session;
 
@@ -84,6 +86,7 @@ public class KonsultasiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_konsultasi);
         ButterKnife.bind(this);
+        btnJanji.setVisibility(View.GONE);
 
         session = new Session(getApplicationContext());
 
