@@ -36,6 +36,20 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/h3"
                 android:text="Jarak"/>
+
+            <TextView
+                android:id="@+id/nomor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/h3"
+                android:text="Nomor"/>
+
+            <TextView
+                android:id="@+id/alamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/h3"
+                android:text="Alamat"/>
         </LinearLayout>
     </LinearLayout>
 

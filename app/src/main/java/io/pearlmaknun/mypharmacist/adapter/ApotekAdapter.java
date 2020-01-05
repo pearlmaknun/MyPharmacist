@@ -28,6 +28,10 @@ public class ApotekAdapter extends RecyclerView.Adapter<ApotekAdapter.MyViewHold
         TextView nama;
         @BindView(R.id.jarak)
         TextView jarak;
+        @BindView(R.id.nomor)
+        TextView nomor;
+        @BindView(R.id.alamat)
+        TextView alamat;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -61,7 +65,15 @@ public class ApotekAdapter extends RecyclerView.Adapter<ApotekAdapter.MyViewHold
     public void onBindViewHolder(final ApotekAdapter.MyViewHolder holder, final int position) {
         final Apotek item = list.get(position);
         holder.nama.setText(item.getApotikName());
-        holder.jarak.setText(item.getJarak() + " KM");
+        double value = Double.valueOf(item.getJarak());
+        double roundOff = (double) Math.round(value * 100) / 100;
+        holder.jarak.setText(roundOff + " KM");
+        if(item.getApotikAddress() != null){
+            holder.alamat.setText(item.getApotikAddress());
+        }
+        if(item.getApotikTelp() != null){
+            holder.nomor.setText(item.getApotikTelp());
+        }
         holder.itemView.setOnClickListener(v -> mOnItemClickListener.onClick(position));
     }
 

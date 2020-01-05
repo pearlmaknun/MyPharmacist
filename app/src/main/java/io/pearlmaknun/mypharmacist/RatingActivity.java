@@ -3,6 +3,8 @@ package io.pearlmaknun.mypharmacist;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRatingBar;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -88,7 +90,25 @@ public class RatingActivity extends AppCompatActivity {
                             if (response1.getStatus()) {
                                 DialogUtils.closeDialog();
                                 Toast.makeText(RatingActivity.this, response1.getMessage(), Toast.LENGTH_LONG).show();
-                                finish();
+                                DialogUtils.dialogYesNo(RatingActivity.this, "Apakah anda tertarik ingin menemui apoteker ?", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(RatingActivity.this, DetailApotekerActivity.class);
+                                        intent.putExtra("id", id);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        Intent intent = new Intent(RatingActivity.this, MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
                             } else {
                                 DialogUtils.closeDialog();
                                 Toast.makeText(RatingActivity.this, response1.getMessage(), Toast.LENGTH_LONG).show();

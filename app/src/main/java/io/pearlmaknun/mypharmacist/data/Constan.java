@@ -28,6 +28,7 @@ public class Constan {
     public static final String RATE_CHAT = BASE_URL_USER + "/ratechat/";
     public static final String PERTEMUAN = BASE_URL_USER + "/janji";
     public static final String HISTORY_KONSULTASI = BASE_URL_USER + "/history";
+    public static final String INFO_APOTEKER = BASE_URL_USER + "/infoapoteker";
 
     //status chat
     public static final String DIPROSES = "0";

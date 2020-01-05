@@ -65,6 +65,10 @@ public class ConsultationActivity extends AppCompatActivity {
     EditText txtMessage;
     @BindView(R.id.txt_countdown)
     TextView txtCountdown;
+    @BindView(R.id.report)
+    ImageView report;
+    @BindView(R.id.teruskan)
+    ImageView teruskan;
 
     Session session;
 
@@ -85,6 +89,9 @@ public class ConsultationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consultation);
         ButterKnife.bind(this);
+        report.setVisibility(View.GONE);
+        teruskan.setVisibility(View.GONE);
+        txtCountdown.setVisibility(View.GONE);
 
         session = new Session(this);
 
@@ -144,7 +151,7 @@ public class ConsultationActivity extends AppCompatActivity {
         });
 
         seenMessage(konsultasiId);
-        countDown();
+        //countDown();
     }
 
     private void seenMessage(final String konsultasiId){
