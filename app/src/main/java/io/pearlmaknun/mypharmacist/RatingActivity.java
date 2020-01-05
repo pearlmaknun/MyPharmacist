@@ -44,7 +44,7 @@ public class RatingActivity extends AppCompatActivity {
 
     Session session;
 
-    String id;
+    String id, apoteker_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class RatingActivity extends AppCompatActivity {
         session = new Session(this);
 
         id = getIntent().getStringExtra("chatid");
+        apoteker_id = getIntent().getStringExtra("id");
     }
 
     private void checkValidasi() {
@@ -94,7 +95,7 @@ public class RatingActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(RatingActivity.this, DetailApotekerActivity.class);
-                                        intent.putExtra("id", id);
+                                        intent.putExtra("id", apoteker_id);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();

@@ -239,6 +239,7 @@ public class ConsultationActivity extends AppCompatActivity {
                                 sendMessage("#end#");
                                 Intent i = new Intent(ConsultationActivity.this, RatingActivity.class);
                                 i.putExtra("chatid", konsultasi.getChatId());
+                                i.putExtra("id", konsultasi.getApotekerId());
                                 startActivity(i);
                                 finish();
                             } else {
