@@ -212,11 +212,6 @@ public class ConsultationActivity extends AppCompatActivity {
             case R.id.report:
                 reportChat();
                 break;
-            case R.id.teruskan:
-                Intent i = new Intent(ConsultationActivity.this, MainPertemuanActivity.class);
-                i.putExtra("konsultasi", konsultasi);
-                startActivity(i);
-                break;
         }
     }
 

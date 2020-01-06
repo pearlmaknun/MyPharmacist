@@ -291,10 +291,6 @@ public class KonsultasiActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), HistoryActivity.class);
                 startActivity(i);
                 break;
-            case R.id.ic_history_janji:
-                Intent a = new Intent(getApplicationContext(), HistoryPertemuan.class);
-                startActivity(a);
-                break;
         }
     }
 

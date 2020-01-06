@@ -1,18 +1,13 @@
 package io.pearlmaknun.mypharmacist.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
@@ -20,10 +15,8 @@ import com.synnapps.carouselview.ImageListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.pearlmaknun.mypharmacist.ApotekListActivity;
 import io.pearlmaknun.mypharmacist.KonsultasiActivity;
 import io.pearlmaknun.mypharmacist.R;
-import io.pearlmaknun.mypharmacist.SearchApotekerActivity;
 import io.pearlmaknun.mypharmacist.data.Session;
 
 public class HomeFragment extends Fragment {

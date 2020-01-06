@@ -20,13 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DetailApotekerActivity"></activity>
-        <activity android:name=".HistoryPertemuan" />
-        <activity android:name=".MainPertemuanActivity" />
-        <activity android:name=".AppointmentActivity" />
         <activity android:name=".KonsultasiActivity" />
         <activity android:name=".EditProfil" />
-        <activity android:name=".SearchApotekerActivity" />
-        <activity android:name=".ApotekListActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".RatingActivity" />
         <activity android:name=".ConsultationActivity" />
@@ -42,9 +37,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
